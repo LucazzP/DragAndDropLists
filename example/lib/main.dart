@@ -7,6 +7,7 @@ import 'package:example/horizontal_example.dart';
 import 'package:example/list_tile_example.dart';
 import 'package:example/sliver_example.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart' show timeDilation;
 
 void main() {
   runApp(MyApp());
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    timeDilation = 1;
     return MaterialApp(
       title: 'Drag and Drop Lists',
       theme: ThemeData(

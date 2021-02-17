@@ -15,7 +15,7 @@ class DragIntoListExample extends StatefulWidget {
 }
 
 class _DragIntoListExample extends State<DragIntoListExample> {
-  List<DragAndDropList> _contents = List<DragAndDropList>();
+  List<DragAndDropList> _contents = <DragAndDropList>[];
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,6 @@ class _DragIntoListExample extends State<DragIntoListExample> {
   }
 
   _onItemAdd(DragAndDropItem newItem, int listIndex, int itemIndex) {
-    print('adding new item');
     setState(() {
       if (itemIndex == -1)
         _contents[listIndex].children.add(newItem);
@@ -106,7 +105,6 @@ class _DragIntoListExample extends State<DragIntoListExample> {
   }
 
   _onListAdd(DragAndDropListInterface newList, int listIndex) {
-    print('adding new list');
     setState(() {
       if (listIndex == -1)
         _contents.add(newList);

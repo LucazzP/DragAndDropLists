@@ -23,6 +23,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
   DragAndDropItem _hoveredDraggable;
 
   bool _dragging = false;
+  bool _firstBuildAfterStartDrag = false;
   Size _containerSize = Size.zero;
   Size _dragHandleSize = Size.zero;
 
@@ -178,29 +179,46 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper>
         child: _hoveredDraggable != null ? Container() : widget.child.child,
       );
     }
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _firstBuildAfterStartDrag = false;
+    });
     return Stack(
       children: <Widget>[
         Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: widget.parameters.verticalAlignment,
           children: <Widget>[
-            AnimatedSize(
-              duration: Duration(
-                  milliseconds: widget.parameters.itemSizeAnimationDuration),
-              vsync: this,
-              alignment: Alignment.topLeft,
-              child: _hoveredDraggable != null
+            if (!_firstBuildAfterStartDrag)
+              AnimatedSize(
+                duration: Duration(
+                    milliseconds: _firstBuildAfterStartDrag
+                        ? 0
+                        : widget.parameters.itemSizeAnimationDuration),
+                vsync: this,
+                alignment: Alignment.topLeft,
+                child: _hoveredDraggable != null
+                    ? Opacity(
+                        opacity: widget.parameters.itemGhostOpacity,
+                        child: widget.parameters.itemGhost ??
+                            _hoveredDraggable.child,
+                      )
+                    : Container(),
+              ),
+            if (_firstBuildAfterStartDrag)
+              _hoveredDraggable != null
                   ? Opacity(
                       opacity: widget.parameters.itemGhostOpacity,
                       child: widget.parameters.itemGhost ??
                           _hoveredDraggable.child,
                     )
                   : Container(),
-            ),
             Listener(
               child: draggable,
               onPointerMove: _onPointerMove,
-              onPointerDown: widget.parameters.onPointerDown,
+              onPointerDown: (event) {
+                _firstBuildAfterStartDrag = true;
+                return widget.parameters.onPointerDown(event);
+              },
               onPointerUp: widget.parameters.onPointerUp,
             ),
           ],

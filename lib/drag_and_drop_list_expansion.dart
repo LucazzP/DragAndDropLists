@@ -129,7 +129,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
 
   List<Widget> _generateDragAndDropListInnerContents(
       DragAndDropBuilderParameters params) {
-    var contents = List<Widget>();
+    var contents = <Widget>[];
     if (children != null && children.isNotEmpty) {
       for (int i = 0; i < children.length; i++) {
         contents.add(DragAndDropItemWrapper(

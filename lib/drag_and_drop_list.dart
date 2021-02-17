@@ -41,7 +41,7 @@ class DragAndDropList implements DragAndDropListInterface {
 
   /// The child elements that will be contained in this list.
   /// It is possible to not provide any children when an empty list is desired.
-  final List<DragAndDropItem> children = List<DragAndDropItem>();
+  final List<DragAndDropItem> children = <DragAndDropItem>[];
 
   /// Whether or not this item can be dragged.
   /// Set to true if it can be reordered.
@@ -67,7 +67,7 @@ class DragAndDropList implements DragAndDropListInterface {
 
   @override
   Widget generateWidget(DragAndDropBuilderParameters params) {
-    var contents = List<Widget>();
+    var contents = <Widget>[];
     if (header != null) {
       contents.add(Flexible(child: header));
     }
@@ -112,12 +112,12 @@ class DragAndDropList implements DragAndDropListInterface {
 
   List<Widget> _generateDragAndDropListInnerContents(
       DragAndDropBuilderParameters params) {
-    var contents = List<Widget>();
+    var contents = <Widget>[];
     if (leftSide != null) {
       contents.add(leftSide);
     }
     if (children != null && children.isNotEmpty) {
-      List<Widget> allChildren = List<Widget>();
+      List<Widget> allChildren = <Widget>[];
       if (params.addLastItemTargetHeightToTop) {
         allChildren.add(Padding(
           padding: EdgeInsets.only(top: params.lastItemTargetHeight),
