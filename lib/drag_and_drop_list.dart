@@ -110,8 +110,7 @@ class DragAndDropList implements DragAndDropListInterface {
     );
   }
 
-  List<Widget> _generateDragAndDropListInnerContents(
-      DragAndDropBuilderParameters params) {
+  List<Widget> _generateDragAndDropListInnerContents(DragAndDropBuilderParameters params) {
     var contents = <Widget>[];
     if (leftSide != null) {
       contents.add(leftSide);
@@ -119,7 +118,8 @@ class DragAndDropList implements DragAndDropListInterface {
     if (children != null && children.isNotEmpty) {
       List<Widget> allChildren = <Widget>[];
       if (params.addLastItemTargetHeightToTop) {
-        allChildren.add(Padding(
+        allChildren.add(AnimatedPadding(
+          duration: params.lastItemTargetAnimationDuration,
           padding: EdgeInsets.only(top: params.lastItemTargetHeight),
         ));
       }
@@ -137,7 +137,8 @@ class DragAndDropList implements DragAndDropListInterface {
         parameters: params,
         onReorderOrAdd: params.onItemDropOnLastTarget,
         child: lastTarget ??
-            Container(
+            AnimatedContainer(
+              duration: params.lastItemTargetAnimationDuration,
               height: params.lastItemTargetHeight,
             ),
       ));
@@ -173,7 +174,8 @@ class DragAndDropList implements DragAndDropListInterface {
                   parameters: params,
                   onReorderOrAdd: params.onItemDropOnLastTarget,
                   child: lastTarget ??
-                      Container(
+                      AnimatedContainer(
+                        duration: params.lastItemTargetAnimationDuration,
                         height: params.lastItemTargetHeight,
                       ),
                 ),

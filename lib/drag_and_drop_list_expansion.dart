@@ -127,8 +127,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
     return toReturn;
   }
 
-  List<Widget> _generateDragAndDropListInnerContents(
-      DragAndDropBuilderParameters params) {
+  List<Widget> _generateDragAndDropListInnerContents(DragAndDropBuilderParameters params) {
     var contents = <Widget>[];
     if (children != null && children.isNotEmpty) {
       for (int i = 0; i < children.length; i++) {
@@ -145,7 +144,8 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
         parameters: params,
         onReorderOrAdd: params.onItemDropOnLastTarget,
         child: lastTarget ??
-            Container(
+            AnimatedContainer(
+              duration: params.lastItemTargetAnimationDuration,
               height: params.lastItemTargetHeight,
             ),
       ));
@@ -165,7 +165,8 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
           parameters: params,
           onReorderOrAdd: params.onItemDropOnLastTarget,
           child: lastTarget ??
-              Container(
+              AnimatedContainer(
+                duration: params.lastItemTargetAnimationDuration,
                 height: params.lastItemTargetHeight,
               ),
         ),

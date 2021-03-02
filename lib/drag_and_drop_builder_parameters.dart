@@ -59,6 +59,7 @@ class DragAndDropBuilderParameters {
   final Decoration listInnerDecoration;
   final double listWidth;
   final double lastItemTargetHeight;
+  final Duration lastItemTargetAnimationDuration;
   final bool addLastItemTargetHeightToTop;
   final Widget dragHandle;
   final bool dragHandleOnLeft;
@@ -99,6 +100,7 @@ class DragAndDropBuilderParameters {
     this.listInnerDecoration,
     this.listWidth = double.infinity,
     this.lastItemTargetHeight = 20,
+    this.lastItemTargetAnimationDuration = const Duration(milliseconds: 500),
     this.addLastItemTargetHeightToTop = false,
     this.dragHandle,
     this.dragHandleOnLeft = false,
