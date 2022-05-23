@@ -1,9 +1,36 @@
 # Changelog
 
+[0.3.2+2] - 21 October 2021
+
+* Replace flutter deprecated elements
+
+[0.3.2+1] - 21 October 2021
+
+* Fix last list target for horizontal lists (thanks [@nvloc120](https://github.com/nvloc120)).
+* Add ability to remove top padding when there is a widget before the DragAndDropLists (See [flutter/flutter#14842](https://github.com/flutter/flutter/issues/14842), thanks [@aliasgarlabs](https://github.com/aliasgarlabs))
+
+## [0.3.2] - 20 April 2021
+
+* Add optional feedback widget to items (thanks [@svoza10](https://github.com/svoza10)).
+
+## [0.3.1] - 15 April 2021
+
+* Fix scrolling in wrong direction when text direction is right-to-left.
+* Fix drag-and-drop feedback widget alignment when text direction is right-to-left.
+
+## [0.3.0+1] - 2 April 2021
+
+* Fix null crash and wrong drag handle used (thanks [@vbuberen](https://github.com/vbuberen)).
+
+## [0.3.0] - 30 March 2021
+
+* DragHandle moved to own widget. To create any drag handle, use the new properties `listDragHandle` and `itemDragHandle` in `DragAndDropLists`.
+* Support null safety, see [details on migration](https://dart.dev/null-safety/migration-guide).
+
 ## [0.2.10] - 14 December 2020
 
-* Bug fix where `listDecorationWhileDragging` wasn't always being applied
-* Allow DragAndDropLists to be contained in an external ListView when `disableScrolling` is set to `true`
+* Bug fix where `listDecorationWhileDragging` wasn't always being applied.
+* Allow DragAndDropLists to be contained in an external ListView when `disableScrolling` is set to `true`.
 
 ## [0.2.9+2] - 17 November 2020
 

@@ -1,12 +1,9 @@
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class HorizontalExample extends StatefulWidget {
-  HorizontalExample({Key key, this.title}) : super(key: key);
-  final String title;
+  HorizontalExample({Key? key}) : super(key: key);
 
   @override
   _HorizontalExample createState() => _HorizontalExample();
@@ -15,11 +12,11 @@ class HorizontalExample extends StatefulWidget {
 class InnerList {
   final String name;
   List<String> children;
-  InnerList({this.name, this.children});
+  InnerList({required this.name, required this.children});
 }
 
 class _HorizontalExample extends State<HorizontalExample> {
-  List<InnerList> _lists;
+  late List<InnerList> _lists;
 
   @override
   void initState() {

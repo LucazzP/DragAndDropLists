@@ -1,19 +1,16 @@
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class FixedExample extends StatefulWidget {
-  FixedExample({Key key, this.title}) : super(key: key);
-  final String title;
+  FixedExample({Key? key}) : super(key: key);
 
   @override
   _FixedExample createState() => _FixedExample();
 }
 
 class _FixedExample extends State<FixedExample> {
-  List<DragAndDropList> _contents;
+  late List<DragAndDropList> _contents;
 
   @override
   void initState() {

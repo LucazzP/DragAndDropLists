@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 
 const Duration _kExpand = Duration(milliseconds: 200);
 
@@ -28,10 +27,10 @@ class ProgrammaticExpansionTile extends StatefulWidget {
   /// the tile to reveal or hide the [children]. The [initiallyExpanded] property must
   /// be non-null.
   const ProgrammaticExpansionTile({
-    @required Key key,
-    @required this.listKey,
+    required Key key,
+    required this.listKey,
     this.leading,
-    @required this.title,
+    required this.title,
     this.subtitle,
     this.isThreeLine = false,
     this.backgroundColor,
@@ -40,27 +39,24 @@ class ProgrammaticExpansionTile extends StatefulWidget {
     this.trailing,
     this.initiallyExpanded = false,
     this.disableTopAndBottomBorders = false,
-  })  : assert(initiallyExpanded != null),
-        assert(listKey != null),
-        assert(key != null),
-        super(key: key);
+  }) : super(key: key);
 
   final Key listKey;
 
   /// A widget to display before the title.
   ///
   /// Typically a [CircleAvatar] widget.
-  final Widget leading;
+  final Widget? leading;
 
   /// The primary content of the list item.
   ///
   /// Typically a [Text] widget.
-  final Widget title;
+  final Widget? title;
 
   /// Additional content displayed below the title.
   ///
   /// Typically a [Text] widget.
-  final Widget subtitle;
+  final Widget? subtitle;
 
   /// Additional content displayed below the title.
   ///
@@ -72,18 +68,18 @@ class ProgrammaticExpansionTile extends StatefulWidget {
   /// When the tile starts expanding, this function is called with the value
   /// true. When the tile starts collapsing, this function is called with
   /// the value false.
-  final ValueChanged<bool> onExpansionChanged;
+  final ValueChanged<bool>? onExpansionChanged;
 
   /// The widgets that are displayed when the tile expands.
   ///
   /// Typically [ListTile] widgets.
-  final List<Widget> children;
+  final List<Widget?> children;
 
   /// The color to display behind the sublist when expanded.
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   /// A widget to display instead of a rotating arrow icon.
-  final Widget trailing;
+  final Widget? trailing;
 
   /// Specifies if the list tile is initially expanded (true) or collapsed (false, the default).
   final bool initiallyExpanded;
@@ -110,13 +106,13 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
   final ColorTween _iconColorTween = ColorTween();
   final ColorTween _backgroundColorTween = ColorTween();
 
-  AnimationController _controller;
-  Animation<double> _iconTurns;
-  Animation<double> _heightFactor;
-  Animation<Color> _borderColor;
-  Animation<Color> _headerColor;
-  Animation<Color> _iconColor;
-  Animation<Color> _backgroundColor;
+  late AnimationController _controller;
+  late Animation<double> _iconTurns;
+  late Animation<double> _heightFactor;
+  late Animation<Color?> _borderColor;
+  late Animation<Color?> _headerColor;
+  late Animation<Color?> _iconColor;
+  late Animation<Color?> _backgroundColor;
 
   bool _isExpanded = false;
 
@@ -133,7 +129,7 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
         _controller.drive(_backgroundColorTween.chain(_easeOutTween));
 
     _isExpanded = PageStorage.of(context)
-            ?.readState(context, identifier: widget.listKey) as bool ??
+            ?.readState(context, identifier: widget.listKey) as bool? ??
         widget.initiallyExpanded;
     if (_isExpanded) _controller.value = 1.0;
 
@@ -142,7 +138,7 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
     SchedulerBinding.instance.addPostFrameCallback((Duration duration) {
       if (widget.onExpansionChanged != null &&
           _isExpanded != widget.initiallyExpanded) {
-        widget.onExpansionChanged(_isExpanded);
+        widget.onExpansionChanged!(_isExpanded);
       }
     });
   }
@@ -183,12 +179,12 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
             ?.writeState(context, _isExpanded, identifier: widget.listKey);
       });
       if (widget.onExpansionChanged != null) {
-        widget.onExpansionChanged(_isExpanded);
+        widget.onExpansionChanged!(_isExpanded);
       }
     }
   }
 
-  Widget _buildChildren(BuildContext context, Widget child) {
+  Widget _buildChildren(BuildContext context, Widget? child) {
     final Color borderSideColor = _borderColor.value ?? Colors.transparent;
     bool setBorder = !widget.disableTopAndBottomBorders;
 
@@ -237,11 +233,11 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
     final ThemeData theme = Theme.of(context);
     _borderColorTween.end = theme.dividerColor;
     _headerColorTween
-      ..begin = theme.textTheme.subtitle1.color
-      ..end = theme.accentColor;
+      ..begin = theme.textTheme.subtitle1!.color
+      ..end = theme.colorScheme.secondary;
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
-      ..end = theme.accentColor;
+      ..end = theme.colorScheme.secondary;
     _backgroundColorTween.end = widget.backgroundColor;
     super.didChangeDependencies();
   }
@@ -252,7 +248,7 @@ class ProgrammaticExpansionTileState extends State<ProgrammaticExpansionTile>
     return AnimatedBuilder(
       animation: _controller.view,
       builder: _buildChildren,
-      child: closed ? null : Column(children: widget.children),
+      child: closed ? null : Column(children: widget.children as List<Widget>),
     );
   }
 }

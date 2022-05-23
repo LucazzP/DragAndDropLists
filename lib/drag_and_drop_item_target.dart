@@ -1,4 +1,3 @@
-import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:flutter/material.dart';
@@ -6,16 +5,16 @@ import 'package:flutter/widgets.dart';
 
 class DragAndDropItemTarget extends StatefulWidget {
   final Widget child;
-  final DragAndDropListInterface parent;
+  final DragAndDropListInterface? parent;
   final DragAndDropBuilderParameters parameters;
   final OnItemDropOnLastTarget onReorderOrAdd;
 
   DragAndDropItemTarget(
-      {@required this.child,
-      @required this.onReorderOrAdd,
-      @required this.parameters,
+      {required this.child,
+      required this.onReorderOrAdd,
+      required this.parameters,
       this.parent,
-      Key key})
+      Key? key})
       : super(key: key);
 
   @override
@@ -24,7 +23,7 @@ class DragAndDropItemTarget extends StatefulWidget {
 
 class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
     with TickerProviderStateMixin {
-  DragAndDropItem _hoveredDraggable;
+  DragAndDropItem? _hoveredDraggable;
 
   @override
   Widget build(BuildContext context) {
@@ -36,33 +35,29 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
             AnimatedSize(
               duration: Duration(
                   milliseconds: widget.parameters.itemSizeAnimationDuration),
-              vsync: this,
               alignment: Alignment.bottomCenter,
               child: _hoveredDraggable != null
                   ? Opacity(
                       opacity: widget.parameters.itemGhostOpacity,
                       child: widget.parameters.itemGhost ??
-                          _hoveredDraggable.child,
+                          _hoveredDraggable!.child,
                     )
                   : Container(),
             ),
-            widget.child ??
-                Container(
-                  height: 20,
-                ),
+            widget.child,
           ],
         ),
         Positioned.fill(
           child: DragTarget<DragAndDropItem>(
             builder: (context, candidateData, rejectedData) {
-              if (candidateData != null && candidateData.isNotEmpty) {}
+              if (candidateData.isNotEmpty) {}
               return Container();
             },
             onWillAccept: (incoming) {
               bool accept = true;
               if (widget.parameters.itemTargetOnWillAccept != null)
                 accept =
-                    widget.parameters.itemTargetOnWillAccept(incoming, widget);
+                    widget.parameters.itemTargetOnWillAccept!(incoming, widget);
               if (accept && mounted) {
                 setState(() {
                   _hoveredDraggable = incoming;
@@ -80,8 +75,7 @@ class _DragAndDropItemTarget extends State<DragAndDropItemTarget>
             onAccept: (incoming) {
               if (mounted) {
                 setState(() {
-                  if (widget.onReorderOrAdd != null)
-                    widget.onReorderOrAdd(incoming, widget.parent, widget);
+                  widget.onReorderOrAdd(incoming, widget.parent!, widget);
                   _hoveredDraggable = null;
                 });
               }

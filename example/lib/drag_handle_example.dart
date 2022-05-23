@@ -1,19 +1,16 @@
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class DragHandleExample extends StatefulWidget {
-  DragHandleExample({Key key, this.title}) : super(key: key);
-  final String title;
+  DragHandleExample({Key? key}) : super(key: key);
 
   @override
   _DragHandleExample createState() => _DragHandleExample();
 }
 
 class _DragHandleExample extends State<DragHandleExample> {
-  List<DragAndDropList> _contents;
+  late List<DragAndDropList> _contents;
 
   @override
   void initState() {
@@ -116,11 +113,23 @@ class _DragHandleExample extends State<DragHandleExample> {
         lastItemTargetHeight: 8,
         addLastItemTargetHeightToTop: true,
         lastListTargetSize: 40,
-        dragHandle: Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: Icon(
-            Icons.menu,
-            color: Colors.black26,
+        listDragHandle: DragHandle(
+          verticalAlignment: DragHandleVerticalAlignment.top,
+          child: Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.menu,
+              color: Colors.black26,
+            ),
+          ),
+        ),
+        itemDragHandle: DragHandle(
+          child: Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.menu,
+              color: Colors.blueGrey,
+            ),
           ),
         ),
       ),

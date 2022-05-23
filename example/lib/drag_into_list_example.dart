@@ -1,14 +1,10 @@
-import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:example/navigation_drawer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class DragIntoListExample extends StatefulWidget {
-  DragIntoListExample({Key key, this.title}) : super(key: key);
-  final String title;
+  DragIntoListExample({Key? key}) : super(key: key);
 
   @override
   _DragIntoListExample createState() => _DragIntoListExample();
@@ -55,7 +51,12 @@ class _DragIntoListExample extends State<DragIntoListExample> {
                       child: Draggable<DragAndDropListInterface>(
                         feedback: Icon(Icons.assignment),
                         child: Icon(Icons.assignment),
-                        data: DragAndDropList(header: Text('New default list')),
+                        data: DragAndDropList(
+                          header: Text(
+                            'New default list',
+                          ),
+                          children: <DragAndDropItem>[],
+                        ),
                       ),
                     ),
                   ),
@@ -107,9 +108,9 @@ class _DragIntoListExample extends State<DragIntoListExample> {
   _onListAdd(DragAndDropListInterface newList, int listIndex) {
     setState(() {
       if (listIndex == -1)
-        _contents.add(newList);
+        _contents.add(newList as DragAndDropList);
       else
-        _contents.insert(listIndex, newList);
+        _contents.insert(listIndex, newList as DragAndDropList);
     });
   }
 }

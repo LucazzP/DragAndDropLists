@@ -1,4 +1,3 @@
-import 'package:drag_and_drop_lists/drag_and_drop_builder_parameters.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_target.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_item_wrapper.dart';
@@ -6,30 +5,32 @@ import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+import 'drag_and_drop_builder_parameters.dart';
+
 class DragAndDropList implements DragAndDropListInterface {
   /// The widget that is displayed at the top of the list.
-  final Widget header;
+  final Widget? header;
 
   /// The widget that is displayed at the bottom of the list.
-  final Widget footer;
+  final Widget? footer;
 
   /// The widget that is displayed to the left of the list.
-  final Widget leftSide;
+  final Widget? leftSide;
 
   /// The widget that is displayed to the right of the list.
-  final Widget rightSide;
+  final Widget? rightSide;
 
   /// The widget to be displayed when a list is empty.
   /// If this is not null, it will override that set in [DragAndDropLists.contentsWhenEmpty].
-  final Widget contentsWhenEmpty;
+  final Widget? contentsWhenEmpty;
 
   /// The widget to be displayed as the last element in the list that will accept
   /// a dragged item.
-  final Widget lastTarget;
+  final Widget? lastTarget;
 
   /// The decoration displayed around a list.
   /// If this is not null, it will override that set in [DragAndDropLists.listDecoration].
-  final Decoration decoration;
+  final Decoration? decoration;
 
   /// The vertical alignment of the contents in this list.
   /// If this is not null, it will override that set in [DragAndDropLists.verticalAlignment].
@@ -41,35 +42,32 @@ class DragAndDropList implements DragAndDropListInterface {
 
   /// The child elements that will be contained in this list.
   /// It is possible to not provide any children when an empty list is desired.
-  final List<DragAndDropItem> children = <DragAndDropItem>[];
+  final List<DragAndDropItem> children;
 
   /// Whether or not this item can be dragged.
   /// Set to true if it can be reordered.
   /// Set to false if it must remain fixed.
   final bool canDrag;
 
-  DragAndDropList(
-      {List<DragAndDropItem> children,
-      this.header,
-      this.footer,
-      this.leftSide,
-      this.rightSide,
-      this.contentsWhenEmpty,
-      this.lastTarget,
-      this.decoration,
-      this.horizontalAlignment = MainAxisAlignment.start,
-      this.verticalAlignment = CrossAxisAlignment.start,
-      this.canDrag = true}) {
-    if (children != null) {
-      children.forEach((element) => this.children.add(element));
-    }
-  }
+  DragAndDropList({
+    this.children = const <DragAndDropItem>[],
+    this.header,
+    this.footer,
+    this.leftSide,
+    this.rightSide,
+    this.contentsWhenEmpty,
+    this.lastTarget,
+    this.decoration,
+    this.horizontalAlignment = MainAxisAlignment.start,
+    this.verticalAlignment = CrossAxisAlignment.start,
+    this.canDrag = true,
+  });
 
   @override
   Widget generateWidget(DragAndDropBuilderParameters params) {
     var contents = <Widget>[];
     if (header != null) {
-      contents.add(Flexible(child: header));
+      contents.add(Flexible(child: header!));
     }
     Widget intrinsicHeight = IntrinsicHeight(
       child: Row(
@@ -94,13 +92,13 @@ class DragAndDropList implements DragAndDropListInterface {
     contents.add(intrinsicHeight);
 
     if (footer != null) {
-      contents.add(Flexible(child: footer));
+      contents.add(Flexible(child: footer!));
     }
 
     return Container(
       width: params.axis == Axis.vertical
           ? double.infinity
-          : params.listWidth - params.listPadding.horizontal,
+          : params.listWidth - params.listPadding!.horizontal,
       decoration: decoration ?? params.listDecoration,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -113,9 +111,9 @@ class DragAndDropList implements DragAndDropListInterface {
   List<Widget> _generateDragAndDropListInnerContents(DragAndDropBuilderParameters params) {
     var contents = <Widget>[];
     if (leftSide != null) {
-      contents.add(leftSide);
+      contents.add(leftSide!);
     }
-    if (children != null && children.isNotEmpty) {
+    if (children.isNotEmpty) {
       List<Widget> allChildren = <Widget>[];
       if (params.addLastItemTargetHeightToTop) {
         allChildren.add(AnimatedPadding(
@@ -129,13 +127,13 @@ class DragAndDropList implements DragAndDropListInterface {
           parameters: params,
         ));
         if (params.itemDivider != null && i < children.length - 1) {
-          allChildren.add(params.itemDivider);
+          allChildren.add(params.itemDivider!);
         }
       }
       allChildren.add(DragAndDropItemTarget(
         parent: this,
         parameters: params,
-        onReorderOrAdd: params.onItemDropOnLastTarget,
+        onReorderOrAdd: params.onItemDropOnLastTarget!,
         child: lastTarget ??
             AnimatedContainer(
               duration: params.lastItemTargetAnimationDuration,
@@ -172,7 +170,7 @@ class DragAndDropList implements DragAndDropListInterface {
                 DragAndDropItemTarget(
                   parent: this,
                   parameters: params,
-                  onReorderOrAdd: params.onItemDropOnLastTarget,
+                  onReorderOrAdd: params.onItemDropOnLastTarget!,
                   child: lastTarget ??
                       AnimatedContainer(
                         duration: params.lastItemTargetAnimationDuration,
@@ -186,7 +184,7 @@ class DragAndDropList implements DragAndDropListInterface {
       );
     }
     if (rightSide != null) {
-      contents.add(rightSide);
+      contents.add(rightSide!);
     }
     return contents;
   }
