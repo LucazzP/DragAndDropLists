@@ -51,12 +51,12 @@ class DragAndDropBuilderParameters {
   final Decoration? listInnerDecoration;
   final double listWidth;
   final double lastItemTargetHeight;
-  final Duration lastItemTargetAnimationDuration;
   final bool addLastItemTargetHeightToTop;
   final DragHandle? listDragHandle;
   final DragHandle? itemDragHandle;
   final bool constrainDraggingAxis;
   final bool disableScrolling;
+  final ValueNotifier<bool> isDraggingNotifier;
 
   DragAndDropBuilderParameters({
     this.onPointerMove,
@@ -90,11 +90,11 @@ class DragAndDropBuilderParameters {
     this.listInnerDecoration,
     this.listWidth = double.infinity,
     this.lastItemTargetHeight = 20,
-    this.lastItemTargetAnimationDuration = const Duration(milliseconds: 500),
     this.addLastItemTargetHeightToTop = false,
     this.listDragHandle,
     this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.disableScrolling = false,
+    required this.isDraggingNotifier,
   });
 }

@@ -142,16 +142,6 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
           contents.add(params.itemDivider!);
         }
       }
-      contents.add(DragAndDropItemTarget(
-        parent: this,
-        parameters: params,
-        onReorderOrAdd: params.onItemDropOnLastTarget!,
-        child: lastTarget ??
-            AnimatedContainer(
-              duration: params.lastItemTargetAnimationDuration,
-              height: params.lastItemTargetHeight,
-            ),
-      ));
     } else {
       contents.add(
         contentsWhenEmpty ??
@@ -162,19 +152,23 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
               ),
             ),
       );
-      contents.add(
-        DragAndDropItemTarget(
-          parent: this,
-          parameters: params,
-          onReorderOrAdd: params.onItemDropOnLastTarget!,
-          child: lastTarget ??
-              AnimatedContainer(
-                duration: params.lastItemTargetAnimationDuration,
-                height: params.lastItemTargetHeight,
-              ),
-        ),
-      );
     }
+
+    contents.add(DragAndDropItemTarget(
+      parent: this,
+      parameters: params,
+      onReorderOrAdd: params.onItemDropOnLastTarget!,
+      child: lastTarget ??
+          ValueListenableBuilder(
+            valueListenable: params.isDraggingNotifier,
+            builder: (context, bool value, child) {
+              return AnimatedContainer(
+                duration: Duration(milliseconds: params.itemSizeAnimationDuration),
+                height: value ? params.lastItemTargetHeight : 0,
+              );
+            },
+          ),
+    ));
     return contents;
   }
 

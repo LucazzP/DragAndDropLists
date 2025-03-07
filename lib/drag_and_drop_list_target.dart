@@ -25,8 +25,7 @@ class DragAndDropListTarget extends StatefulWidget {
   State<StatefulWidget> createState() => _DragAndDropListTarget();
 }
 
-class _DragAndDropListTarget extends State<DragAndDropListTarget>
-    with TickerProviderStateMixin {
+class _DragAndDropListTarget extends State<DragAndDropListTarget> with TickerProviderStateMixin {
   DragAndDropListInterface? _hoveredDraggable;
 
   @override
@@ -34,8 +33,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
     Widget visibleContents = Column(
       children: <Widget>[
         AnimatedSize(
-          duration: Duration(
-              milliseconds: widget.parameters.listSizeAnimationDuration),
+          duration: Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
           alignment: widget.parameters.axis == Axis.vertical
               ? Alignment.bottomCenter
               : Alignment.centerLeft,
@@ -48,13 +46,16 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
               : Container(),
         ),
         widget.child ??
-            SizedBox(
-              height: widget.parameters.axis == Axis.vertical
-                  ? widget.lastListTargetSize
-                  : null,
-              width: widget.parameters.axis == Axis.horizontal
-                  ? widget.lastListTargetSize
-                  : null,
+            ValueListenableBuilder(
+              valueListenable: widget.parameters.isDraggingNotifier,
+              builder: (context, bool isDragging, child) {
+                final size = isDragging ? widget.lastListTargetSize : 0.0;
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: widget.parameters.listSizeAnimationDuration),
+                  height: widget.parameters.axis == Axis.vertical ? size : null,
+                  width: widget.parameters.axis == Axis.horizontal ? size : null,
+                );
+              },
             ),
       ],
     );
@@ -82,8 +83,7 @@ class _DragAndDropListTarget extends State<DragAndDropListTarget>
             onWillAcceptWithDetails: (details) {
               bool accept = true;
               if (widget.parameters.listTargetOnWillAccept != null) {
-                accept =
-                    widget.parameters.listTargetOnWillAccept!(details.data, widget);
+                accept = widget.parameters.listTargetOnWillAccept!(details.data, widget);
               }
               if (accept && mounted) {
                 setState(() {

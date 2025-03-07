@@ -121,10 +121,17 @@ class DragAndDropList implements DragAndDropListInterface {
     if (children.isNotEmpty) {
       List<Widget> allChildren = <Widget>[];
       if (params.addLastItemTargetHeightToTop) {
-        allChildren.add(AnimatedPadding(
-          duration: params.lastItemTargetAnimationDuration,
-          padding: EdgeInsets.only(top: params.lastItemTargetHeight),
-        ));
+        allChildren.add(
+          ValueListenableBuilder(
+            valueListenable: params.isDraggingNotifier,
+            builder: (context, bool value, child) {
+              return AnimatedPadding(
+                duration: Duration(milliseconds: params.itemSizeAnimationDuration),
+                padding: EdgeInsets.only(top: value ? params.lastItemTargetHeight : 0),
+              );
+            },
+          ),
+        );
       }
       for (int i = 0; i < children.length; i++) {
         allChildren.add(DragAndDropItemWrapper(
@@ -141,9 +148,14 @@ class DragAndDropList implements DragAndDropListInterface {
         parameters: params,
         onReorderOrAdd: params.onItemDropOnLastTarget!,
         child: lastTarget ??
-            AnimatedContainer(
-              duration: params.lastItemTargetAnimationDuration,
-              height: params.lastItemTargetHeight,
+            ValueListenableBuilder(
+              valueListenable: params.isDraggingNotifier,
+              builder: (context, bool value, child) {
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: params.itemSizeAnimationDuration),
+                  height: value ? params.lastItemTargetHeight : 0,
+                );
+              },
             ),
       ));
       contents.add(
@@ -178,9 +190,14 @@ class DragAndDropList implements DragAndDropListInterface {
                   parameters: params,
                   onReorderOrAdd: params.onItemDropOnLastTarget!,
                   child: lastTarget ??
-                      AnimatedContainer(
-                        duration: params.lastItemTargetAnimationDuration,
-                        height: params.lastItemTargetHeight,
+                      ValueListenableBuilder(
+                        valueListenable: params.isDraggingNotifier,
+                        builder: (context, bool value, child) {
+                          return AnimatedContainer(
+                            duration: Duration(milliseconds: params.itemSizeAnimationDuration),
+                            height: value ? params.lastItemTargetHeight : 0,
+                          );
+                        },
                       ),
                 ),
               ],
