@@ -8,7 +8,7 @@ import 'package:drag_and_drop_lists/drag_and_drop_list_interface.dart';
 import 'package:drag_and_drop_lists/programmatic_expansion_tile.dart';
 import 'package:flutter/material.dart';
 
-typedef void OnExpansionChanged(bool expanded);
+typedef OnExpansionChanged = void Function(bool expanded);
 
 /// This class mirrors flutter's [ExpansionTile], with similar options.
 class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
@@ -25,6 +25,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   /// This function will be called when the expansion of a tile is changed.
   final OnExpansionChanged? onExpansionChanged;
   final Color? backgroundColor;
+  @override
   final List<DragAndDropItem>? children;
   final Widget? contentsWhenEmpty;
   final Widget? lastTarget;
@@ -32,13 +33,17 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   /// Whether or not this item can be dragged.
   /// Set to true if it can be reordered.
   /// Set to false if it must remain fixed.
+  @override
   final bool canDrag;
+
+  @override
+  final Key? key;
 
   /// Disable to borders displayed at the top and bottom when expanded
   final bool disableTopAndBottomBorders;
 
-  ValueNotifier<bool> _expanded = ValueNotifier<bool>(true);
-  GlobalKey<ProgrammaticExpansionTileState> _expansionKey =
+  final ValueNotifier<bool> _expanded = ValueNotifier<bool>(true);
+  final GlobalKey<ProgrammaticExpansionTileState> _expansionKey =
       GlobalKey<ProgrammaticExpansionTileState>();
 
   DragAndDropListExpansion({
@@ -54,6 +59,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
     this.lastTarget,
     required this.listKey,
     this.canDrag = true,
+    this.key,
     this.disableTopAndBottomBorders = false,
   }) {
     _expanded.value = initiallyExpanded;
@@ -104,14 +110,14 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
                   if (candidateData.isNotEmpty) {}
                   return Container();
                 },
-                onWillAccept: (incoming) {
+                onWillAcceptWithDetails: (details) {
                   _startExpansionTimer();
                   return false;
                 },
-                onLeave: (incoming) {
+                onLeave: (data) {
                   _stopExpansionTimer();
                 },
-                onAccept: (incoming) {},
+                onAcceptWithDetails: (details) {},
               ),
             )
           ]);
@@ -149,7 +155,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
     } else {
       contents.add(
         contentsWhenEmpty ??
-            Text(
+            const Text(
               'Empty list',
               style: TextStyle(
                 fontStyle: FontStyle.italic,
@@ -174,10 +180,11 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
 
   @override
   toggleExpanded() {
-    if (isExpanded)
+    if (isExpanded) {
       collapse();
-    else
+    } else {
       expand();
+    }
   }
 
   @override
@@ -208,7 +215,7 @@ class DragAndDropListExpansion implements DragAndDropListExpansionInterface {
   late Timer _expansionTimer;
 
   _startExpansionTimer() async {
-    _expansionTimer = Timer(Duration(milliseconds: 400), _expansionCallback);
+    _expansionTimer = Timer(const Duration(milliseconds: 400), _expansionCallback);
   }
 
   _stopExpansionTimer() async {
