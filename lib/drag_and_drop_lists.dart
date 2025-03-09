@@ -286,6 +286,11 @@ class DragAndDropLists extends StatefulWidget {
   /// https://github.com/flutter/flutter/issues/14842#issuecomment-371344881
   final bool removeTopPadding;
 
+  /// Disables the drag and drop functionality. This is useful when you want to
+  /// show the lists in a read-only mode. It will hide the drag handles and
+  /// prevent dragging.
+  final bool enabled;
+
   DragAndDropLists({
     required this.children,
     required this.onItemReorder,
@@ -336,6 +341,7 @@ class DragAndDropLists extends StatefulWidget {
     this.itemDragHandle,
     this.constrainDraggingAxis = true,
     this.removeTopPadding = false,
+    this.enabled = true,
     super.key,
   }) {
     if (listGhost == null && children.whereType<DragAndDropListExpansionInterface>().isNotEmpty) {
@@ -546,6 +552,18 @@ class DragAndDropListsState extends State<DragAndDropLists> {
     } else if (includeSeparators && index.isOdd) {
       return widget.listDivider!;
     } else {
+      if (!widget.enabled) {
+        final list = widget.children[(includeSeparators ? index / 2 : index).toInt()];
+        if (list.children == null || list.children!.isEmpty) {
+          return const SizedBox();
+        }
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: list.children!.length,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) => list.children![index].child,
+        );
+      }
       return DragAndDropListWrapper(
         dragAndDropList: widget.children[(includeSeparators ? index / 2 : index).toInt()],
         parameters: parameters,
