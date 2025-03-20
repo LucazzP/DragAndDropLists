@@ -210,7 +210,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
                 _firstBuildAfterStartDrag = true;
                 return widget.parameters.onPointerDown?.call(event);
               },
-              onPointerUp: widget.parameters.onPointerUp,
+              onPointerUp: (event) {
+                _firstBuildAfterStartDrag = true;
+                return widget.parameters.onPointerUp?.call(event);
+              },
               child: draggable,
             ),
           ],
