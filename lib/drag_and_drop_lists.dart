@@ -490,10 +490,12 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       DragAndDropListTarget dragAndDropListTarget, DragAndDropBuilderParameters parameters) {
     if (widget.axis == Axis.vertical) {
       return Column(
+        mainAxisSize: MainAxisSize.min,
         children: _buildOuterList(dragAndDropListTarget, parameters),
       );
     } else {
       return Row(
+        mainAxisSize: MainAxisSize.min,
         children: _buildOuterList(dragAndDropListTarget, parameters),
       );
     }
