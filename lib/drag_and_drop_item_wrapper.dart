@@ -6,8 +6,7 @@ class DragAndDropItemWrapper extends StatefulWidget {
   final DragAndDropItem child;
   final DragAndDropBuilderParameters parameters;
 
-  const DragAndDropItemWrapper(
-      {required this.child, required this.parameters, super.key});
+  const DragAndDropItemWrapper({required this.child, required this.parameters, super.key});
 
   @override
   State<StatefulWidget> createState() => _DragAndDropItemWrapper();
@@ -24,7 +23,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
   @override
   Widget build(BuildContext context) {
     Widget draggable;
-    if (widget.child.canDrag) {
+    if (widget.child.canDrag && widget.parameters.enabled) {
       if (widget.parameters.itemDragHandle != null) {
         Widget feedback = SizedBox(
           width: widget.parameters.itemDraggingWidth ?? _containerSize.width,
@@ -63,10 +62,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
             cursor: SystemMouseCursors.grab,
             child: Draggable<DragAndDropItem>(
               data: widget.child,
-              axis: widget.parameters.axis == Axis.vertical &&
-                      widget.parameters.constrainDraggingAxis
-                  ? Axis.vertical
-                  : null,
+              axis:
+                  widget.parameters.axis == Axis.vertical && widget.parameters.constrainDraggingAxis
+                      ? Axis.vertical
+                      : null,
               feedback: Transform.translate(
                 offset: _feedbackContainerOffset(),
                 child: Material(
@@ -119,8 +118,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
                 ? Axis.vertical
                 : null,
             feedback: SizedBox(
-              width:
-                  widget.parameters.itemDraggingWidth ?? _containerSize.width,
+              width: widget.parameters.itemDraggingWidth ?? _containerSize.width,
               child: Material(
                 color: Colors.transparent,
                 child: Container(
@@ -148,8 +146,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
                 ? Axis.vertical
                 : null,
             feedback: SizedBox(
-              width:
-                  widget.parameters.itemDraggingWidth ?? _containerSize.width,
+              width: widget.parameters.itemDraggingWidth ?? _containerSize.width,
               child: Material(
                 color: Colors.transparent,
                 child: Container(
@@ -224,8 +221,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
             onWillAcceptWithDetails: (details) {
               bool accept = true;
               if (widget.parameters.itemOnWillAccept != null) {
-                accept = widget.parameters.itemOnWillAccept!(
-                    details.data, widget.child);
+                accept = widget.parameters.itemOnWillAccept!(details.data, widget.child);
               }
               if (accept && mounted) {
                 setState(() {

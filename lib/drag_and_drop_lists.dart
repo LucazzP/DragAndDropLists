@@ -430,6 +430,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       constrainDraggingAxis: widget.constrainDraggingAxis,
       disableScrolling: widget.disableScrolling,
       isDraggingNotifier: isDragging,
+      enabled: widget.enabled,
     );
 
     DragAndDropListTarget dragAndDropListTarget = DragAndDropListTarget(
@@ -553,20 +554,8 @@ class DragAndDropListsState extends State<DragAndDropLists> {
       if (!widget.enabled) return const SizedBox();
       return dragAndDropListTarget;
     } else if (includeSeparators && index.isOdd) {
-      return widget.listDivider!;
+      return widget.listDivider ?? const Divider();
     } else {
-      if (!widget.enabled) {
-        final list = widget.children[(includeSeparators ? index / 2 : index).toInt()];
-        if (list.children == null || list.children!.isEmpty) {
-          return const SizedBox();
-        }
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: list.children!.length,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) => list.children![index].child,
-        );
-      }
       return DragAndDropListWrapper(
         dragAndDropList: widget.children[(includeSeparators ? index / 2 : index).toInt()],
         parameters: parameters,

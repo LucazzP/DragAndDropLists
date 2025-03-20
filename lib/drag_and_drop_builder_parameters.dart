@@ -57,6 +57,7 @@ class DragAndDropBuilderParameters {
   final bool constrainDraggingAxis;
   final bool disableScrolling;
   final ValueNotifier<bool> isDraggingNotifier;
+  final bool enabled;
 
   DragAndDropBuilderParameters({
     this.onPointerMove,
@@ -96,5 +97,6 @@ class DragAndDropBuilderParameters {
     this.constrainDraggingAxis = true,
     this.disableScrolling = false,
     required this.isDraggingNotifier,
+    this.enabled = true,
   });
 }
