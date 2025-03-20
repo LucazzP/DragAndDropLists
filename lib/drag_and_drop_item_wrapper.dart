@@ -177,6 +177,7 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _firstBuildAfterStartDrag = false;
     });
+    _firstBuildAfterStartDrag = true;
     return Stack(
       children: <Widget>[
         Column(
@@ -212,43 +213,44 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
             ),
           ],
         ),
-        Positioned.fill(
-          child: DragTarget<DragAndDropItem>(
-            builder: (context, candidateData, rejectedData) {
-              if (candidateData.isNotEmpty) {}
-              return Container();
-            },
-            onWillAcceptWithDetails: (details) {
-              bool accept = true;
-              if (widget.parameters.itemOnWillAccept != null) {
-                accept = widget.parameters.itemOnWillAccept!(details.data, widget.child);
-              }
-              if (accept && mounted) {
-                setState(() {
-                  _hoveredDraggable = details.data;
-                });
-              }
-              return accept;
-            },
-            onLeave: (data) {
-              if (mounted) {
-                setState(() {
-                  _hoveredDraggable = null;
-                });
-              }
-            },
-            onAcceptWithDetails: (details) {
-              if (mounted) {
-                setState(() {
-                  if (widget.parameters.onItemReordered != null) {
-                    widget.parameters.onItemReordered!(details.data, widget.child);
-                  }
-                  _hoveredDraggable = null;
-                });
-              }
-            },
-          ),
-        )
+        if (widget.parameters.enabled)
+          Positioned.fill(
+            child: DragTarget<DragAndDropItem>(
+              builder: (context, candidateData, rejectedData) {
+                if (candidateData.isNotEmpty) {}
+                return Container();
+              },
+              onWillAcceptWithDetails: (details) {
+                bool accept = true;
+                if (widget.parameters.itemOnWillAccept != null) {
+                  accept = widget.parameters.itemOnWillAccept!(details.data, widget.child);
+                }
+                if (accept && mounted) {
+                  setState(() {
+                    _hoveredDraggable = details.data;
+                  });
+                }
+                return accept;
+              },
+              onLeave: (data) {
+                if (mounted) {
+                  setState(() {
+                    _hoveredDraggable = null;
+                  });
+                }
+              },
+              onAcceptWithDetails: (details) {
+                if (mounted) {
+                  setState(() {
+                    if (widget.parameters.onItemReordered != null) {
+                      widget.parameters.onItemReordered!(details.data, widget.child);
+                    }
+                    _hoveredDraggable = null;
+                  });
+                }
+              },
+            ),
+          )
       ],
     );
   }
