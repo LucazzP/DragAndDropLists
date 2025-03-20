@@ -177,7 +177,6 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _firstBuildAfterStartDrag = false;
     });
-    _firstBuildAfterStartDrag = true;
     return Stack(
       children: <Widget>[
         Column(
@@ -207,7 +206,10 @@ class _DragAndDropItemWrapper extends State<DragAndDropItemWrapper> with TickerP
                   : Container(),
             Listener(
               onPointerMove: _onPointerMove,
-              onPointerDown: widget.parameters.onPointerDown,
+              onPointerDown: (event) {
+                _firstBuildAfterStartDrag = true;
+                return widget.parameters.onPointerDown?.call(event);
+              },
               onPointerUp: widget.parameters.onPointerUp,
               child: draggable,
             ),
