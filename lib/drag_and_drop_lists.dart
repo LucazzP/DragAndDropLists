@@ -550,6 +550,7 @@ class DragAndDropListsState extends State<DragAndDropLists> {
   Widget _buildInnerList(int index, int childrenCount, DragAndDropListTarget dragAndDropListTarget,
       bool includeSeparators, DragAndDropBuilderParameters parameters) {
     if (index == childrenCount - 1) {
+      if (!widget.enabled) return const SizedBox();
       return dragAndDropListTarget;
     } else if (includeSeparators && index.isOdd) {
       return widget.listDivider!;
